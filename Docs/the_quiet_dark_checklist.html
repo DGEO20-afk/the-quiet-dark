@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Dark — Checklist</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0d0f0e;
+    color: #e8e6e0;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .header {
+    padding: 2rem 1.5rem 1.25rem;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #e8e6e0;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title i { font-size: 22px; color: #5DCAA5; }
+
+  .subtitle {
+    font-size: 13px;
+    color: #888780;
+    margin-top: 5px;
+  }
+
+  .progress-bar-wrap {
+    margin-top: 1.1rem;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: #1D9E75;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: #888780;
+    margin-top: 6px;
+  }
+
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .phase {
+    border: 0.5px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #13160f;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .phase-header:hover { background: rgba(255,255,255,0.04); }
+
+  .phase-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .phase-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #e8e6e0;
+    flex: 1;
+  }
+
+  .phase-count {
+    font-size: 12px;
+    color: #888780;
+  }
+
+  .phase-chevron {
+    font-size: 15px;
+    color: #888780;
+    transition: transform 0.2s;
+  }
+
+  .phase-chevron.open { transform: rotate(180deg); }
+
+  .phase-body {
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    padding: 0.75rem 1.1rem;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .phase-body.open { display: flex; }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+
+  .task:hover { background: rgba(255,255,255,0.05); }
+
+  .checkbox {
+    width: 17px;
+    height: 17px;
+    border: 0.5px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .checkbox.checked {
+    background: #1D9E75;
+    border-color: #1D9E75;
+  }
+
+  .checkbox i { font-size: 11px; color: white; }
+
+  .task-text {
+    font-size: 14px;
+    color: #e8e6e0;
+    line-height: 1.4;
+  }
+
+  .task-text.done {
+    color: #555550;
+    text-decoration: line-through;
+  }
+
+  .task-note {
+    font-size: 12px;
+    color: #666661;
+    margin-top: 2px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #444441;
+    margin-top: 2.5rem;
+    padding-bottom: 1rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="title"><i class="ti ti-trees"></i> The Quiet Dark</div>
+    <div class="subtitle">Demo development checklist</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+    <div class="progress-label" id="prog-label">0 / 0 tasks completed</div>
+  </div>
+
+  <div class="phases" id="phases-container"></div>
+
+  <div class="footer">The Quiet Dark — Walking Simulator Demo</div>
+
+</div>
+
+<script>
+const phases = [
+  {
+    id: 1,
+    title: "Blender assets",
+    badge: "Phase 1",
+    badgeBg: "#0F3D2A",
+    badgeColor: "#5DCAA5",
+    tasks: [
+      { text: "Baum-Variante 1 — hoher, schlanker Stamm", note: "Basis-Template für alle Bäume" },
+      { text: "Baum-Variante 2 — knorrig, leicht verdreht", note: "" },
+      { text: "Baum-Variante 3 — junger, dünner Baum", note: "" },
+      { text: "Baum-Variante 4 — abgestorbener Baum (kahl)", note: "Für Atmosphäre" },
+      { text: "Felsen-Variante 1 — großer moosbewachsener Stein", note: "" },
+      { text: "Felsen-Variante 2 — mittlerer Stein", note: "" },
+      { text: "Felsen-Variante 3 — kleiner Steincluster", note: "" },
+      { text: "Bodenpflanzen — Farnbüschel", note: "" },
+      { text: "Bodenpflanzen — Grasbüschel", note: "" },
+      { text: "Umgefallener Baumstamm", note: "" },
+      { text: "Alle Assets als FBX exportieren", note: "Unity-ready, Y-up, 1 Unit = 1 Meter" },
+    ]
+  },
+  {
+    id: 2,
+    title: "Unity basis setup",
+    badge: "Phase 2",
+    badgeBg: "#0C2E50",
+    badgeColor: "#85B7EB",
+    tasks: [
+      { text: "Unity Projekt erstellen (URP)", note: "Universal Render Pipeline für besseres Lighting" },
+      { text: "Ordnerstruktur in Unity anlegen", note: "Models, Materials, Scenes, Scripts, Audio, Prefabs" },
+      { text: "Alle FBX Assets importieren", note: "" },
+      { text: "First Person Controller einrichten", note: "Character Controller + Mouse Look Script" },
+      { text: "Grundbeleuchtung — kalt, dunkel", note: "Directional Light + kalte Ambient Color" },
+      { text: "Skybox — dunkler bewölkter Nachthimmel", note: "" },
+    ]
+  },
+  {
+    id: 3,
+    title: "Szene bauen",
+    badge: "Phase 3",
+    badgeBg: "#271D5A",
+    badgeColor: "#AFA9EC",
+    tasks: [
+      { text: "Terrain erstellen und formen", note: "Hügel, leichte Unebenheiten, kein flaches Grid" },
+      { text: "Terrain-Textur — dunkler Waldboden", note: "Erde, Moos, Laub" },
+      { text: "Bäume platzieren — dichte Gruppen", note: "Variation in Größe und Rotation" },
+      { text: "Felsen und Props verteilen", note: "" },
+      { text: "Bodenpflanzen streuen", note: "Farne besonders entlang des Weges" },
+      { text: "Weg/Pfad durch den Wald definieren", note: "Schmaler, gewundener Pfad" },
+    ]
+  },
+  {
+    id: 4,
+    title: "Atmosphäre & Stimmung",
+    badge: "Phase 4",
+    badgeBg: "#3D1A0C",
+    badgeColor: "#F0997B",
+    tasks: [
+      { text: "Fog einrichten — dicht, blau-grau", note: "Sichtweite stark begrenzen" },
+      { text: "Post-Processing — Vignette", note: "Dunkle Ränder erhöhen Fokus" },
+      { text: "Post-Processing — Color Grading", note: "Kalt, entsättigt, leicht blau-grün" },
+      { text: "Bodennebel — Particle System", note: "Langsam, am Boden, dichte Wolken" },
+      { text: "Wind-Animation auf Bäumen", note: "Subtil, leichtes Schwanken" },
+      { text: "Cell Shader / Toon Shader einrichten", note: "Harte Licht-Schatten-Grenze, optional Outline" },
+      { text: "Mondlicht-Patches", note: "Einzelne Lichtflecken durch Blätterdach" },
+      { text: "Ambient Sound — Windgeräusche", note: "" },
+      { text: "Ambient Sound — Äste, Stille", note: "Sehr leise, intermittierend" },
+    ]
+  },
+  {
+    id: 5,
+    title: "Polish & demo",
+    badge: "Phase 5",
+    badgeBg: "#3D2206",
+    badgeColor: "#FAC775",
+    tasks: [
+      { text: "Spielbaren Loop testen", note: "Vom Start bis Ende des Pfades" },
+      { text: "Performance optimieren", note: "LOD Groups, Draw Call Batching" },
+      { text: "Kollision auf allen Assets prüfen", note: "" },
+      { text: "Framerate-Test auf Zielhardware", note: "" },
+      { text: "Demo-Build exportieren", note: "Windows Build" },
+    ]
+  }
+];
+
+let checked = {};
+
+try {
+  const saved = localStorage.getItem('tqd_checklist');
+  if (saved) checked = JSON.parse(saved);
+} catch(e) {}
+
+function save() {
+  try { localStorage.setItem('tqd_checklist', JSON.stringify(checked)); } catch(e) {}
+}
+
+function countAll() {
+  let total = 0, done = 0;
+  phases.forEach(p => {
+    p.tasks.forEach((t, ti) => {
+      total++;
+      if (checked[p.id + '-' + ti]) done++;
+    });
+  });
+  return { total, done };
+}
+
+function phaseCount(p) {
+  let done = 0;
+  p.tasks.forEach((t, ti) => { if (checked[p.id + '-' + ti]) done++; });
+  return done + ' / ' + p.tasks.length;
+}
+
+function updateProgress() {
+  const { total, done } = countAll();
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = done + ' / ' + total + ' tasks completed';
+}
+
+function render() {
+  const container = document.getElementById('phases-container');
+  const openStates = {};
+  document.querySelectorAll('.phase-body').forEach(b => {
+    openStates[b.id] = b.classList.contains('open');
+  });
+
+  container.innerHTML = '';
+
+  phases.forEach((p, pi) => {
+    const isOpen = openStates['body-' + p.id] !== undefined ? openStates['body-' + p.id] : pi === 0;
+
+    const phaseEl = document.createElement('div');
+    phaseEl.className = 'phase';
+
+    const header = document.createElement('div');
+    header.className = 'phase-header';
+    header.setAttribute('role', 'button');
+    header.setAttribute('aria-expanded', isOpen);
+    header.innerHTML = `
+      <span class="phase-badge" style="background:${p.badgeBg};color:${p.badgeColor}">${p.badge}</span>
+      <span class="phase-title">${p.title}</span>
+      <span class="phase-count" id="count-${p.id}">${phaseCount(p)}</span>
+      <i class="ti ti-chevron-down phase-chevron ${isOpen ? 'open' : ''}" id="chev-${p.id}" aria-hidden="true"></i>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'phase-body' + (isOpen ? ' open' : '');
+    body.id = 'body-' + p.id;
+
+    p.tasks.forEach((t, ti) => {
+      const key = p.id + '-' + ti;
+      const isDone = !!checked[key];
+      const task = document.createElement('div');
+      task.className = 'task';
+      task.setAttribute('role', 'checkbox');
+      task.setAttribute('aria-checked', isDone);
+      task.innerHTML = `
+        <div class="checkbox ${isDone ? 'checked' : ''}" id="cb-${key}">
+          ${isDone ? '<i class="ti ti-check" aria-hidden="true"></i>' : ''}
+        </div>
+        <div>
+          <div class="task-text ${isDone ? 'done' : ''}">${t.text}</div>
+          ${t.note ? `<div class="task-note">${t.note}</div>` : ''}
+        </div>
+      `;
+      task.addEventListener('click', () => {
+        checked[key] = !checked[key];
+        save();
+        render();
+        updateProgress();
+      });
+      body.appendChild(task);
+    });
+
+    header.addEventListener('click', () => {
+      const isNowOpen = body.classList.toggle('open');
+      document.getElementById('chev-' + p.id).classList.toggle('open', isNowOpen);
+      header.setAttribute('aria-expanded', isNowOpen);
+    });
+
+    phaseEl.appendChild(header);
+    phaseEl.appendChild(body);
+    container.appendChild(phaseEl);
+  });
+
+  updateProgress();
+}
+
+render();
+</script>
+</body>
+</html>

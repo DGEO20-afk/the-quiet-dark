@@ -641,11 +641,11 @@
   </div>
   <div class="stats">
     <div class="stat">
-      <div class="stat-val" id="stat-sessions">1</div>
+      <div class="stat-val" id="stat-sessions">3</div>
       <div class="stat-label">Sessions</div>
     </div>
     <div class="stat">
-      <div class="stat-val" id="stat-hours">4h</div>
+      <div class="stat-val" id="stat-hours">9h</div>
       <div class="stat-label">Total Zeit</div>
     </div>
     <div class="stat">
@@ -795,6 +795,37 @@ const defaultSessions = [
       'FBX Export aller Assets und pushen',
       'Regelmässige Commits nach jeder Session',
       'Unity Projekt erstellen und in Unity/ Ordner pushen',
+    ]
+  },
+  {
+    id: 3,
+    date: '2026-05-30',
+    duration: '~3h',
+    title: 'Strategiewechsel — Asset-Packs, Mobile-Target & erster Unity-Start',
+    phase: 'Phase 2 — Unity Setup',
+    tags: ['unity', 'planning', 'assets'],
+    notes: `Grosser Strategie- und Richtungswechsel für The Quiet Dark.\n\nENTSCHEIDUNG: Assets von Grund auf in Blender bauen hat nicht gut funktioniert. Statt eigener Assets wird jetzt ein fertiges Asset-Pack als Basis genutzt und der Style darüber neu definiert. Blender bleibt für spätere Unique-Assets, aber nicht mehr für die komplette Szene.\n\nNEUE ZIELPLATTFORM: Primär Mobile (Android), NICHT iOS. Sekundär: Laptop (Razer Blade Stealth 13 2019, GTX 1650), Steam Deck, High-End PC. Ziel: stabil 30 FPS gesperrt auf dem schwächsten Gerät (Samsung S23 — limitiert durch Thermal Throttling, nicht durch rohe Power).\n\nASSET-PACK RECHERCHE:\n— ALP "Environment Vegetation Bundle" im Sale entdeckt (€3.31 statt €55.19, -94%) — photorealistisch, gute Reserve\n— Joshua Pearson "Environmental Asset Pack" (kostenlos) — passt perfekt zum Slender/Ethan-Carter-Vibe\n— Erkenntnis: kein Pack ist allein vollständig. Audio, Props & FP-Controller fehlen überall.\n\nVOLLSTÄNDIGES PLANUNGSDOKUMENT erstellt (Docs/): Asset-Bedarf (Vegetation, Gestein, Props, Atmosphäre, Audio, technische Bausteine) + Performance-Ziele pro Gerät + URP-Mobile-Optimierungs-Checkliste + Profiling-Workflow.\n\nUNITY START:\n— Entscheidung: erst "Get Started With Unity" Tutorial zum Lernen der Editor-Grundlagen\n— Lernprojekt "unity_3d_learn" angelegt (getrennt vom echten Repo, kein Git)\n— Gelernt: Unity-Pfade kurz halten (Windows 260-Zeichen-Limit), Pfadlängen-Warnung beim Setup verstanden\n\nFESTGEHALTEN FÜR SPÄTER:\n— Pickup-Mechanik (Slender-Style "8 pages") — später implementieren\n— FMOD Middleware für interaktive Sound-Events + Reverb-Boxen — Sounds bereits vorhanden\n— Minimale Wind-Animation auf Assets für lebendige Atmosphäre`,
+    goals: [
+      { text: 'Strategiewechsel zu Asset-Packs entscheiden', status: 'done' },
+      { text: 'Zielplattform definieren (Mobile/Android primär)', status: 'done' },
+      { text: 'Asset-Packs recherchieren & evaluieren', status: 'done' },
+      { text: 'Performance-Ziele pro Gerät klären', status: 'done' },
+      { text: 'Vollständiges Planungsdokument erstellen', status: 'done' },
+      { text: '"Get Started With Unity" Tutorial', status: 'partial' },
+      { text: 'Erste eigene Wald-Testszene bauen', status: 'todo' },
+    ],
+    issues: [
+      { text: 'Unity Pfadlängen-Warnung beim Projekt-Setup — durch kürzeren Projektnamen gelöst', status: 'solved' },
+      { text: 'Photorealistische Packs (ALP) brauchen aktive Mobile-Optimierung — als Aufgabe vermerkt', status: 'wip' },
+      { text: 'Joshua Pearson Pack ist Built-in 2019 — URP-Material-Konvertierung nötig', status: 'wip' },
+    ],
+    next: [
+      '"Get Started With Unity" Tutorial abschliessen',
+      'Asset-Packs herunterladen (Joshua Pearson kostenlos + ALP Sale sichern)',
+      'Unity Terrain URP Demo-Szene analysieren (zum Lernen)',
+      'Kleine Wald-Testszene bauen (~15-20m Pfad)',
+      'Erster Android-Build & FPS-Test auf S23',
+      'Audio-Pack für Forest Ambience suchen',
     ]
   }
 ];
